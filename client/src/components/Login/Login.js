@@ -10,6 +10,7 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [errorOccurred, setErrorOccurred] = useState(false);
     const history = useHistory();
+    const [emailValid, setEmailValid] = useState(true);
 
     const authCtx = useContext(AuthContext);
 
@@ -39,6 +40,21 @@ const Login = () => {
         setErrorOccurred(false);
     }
 
+    const checkValidity = (event) => {
+        if(!event.target.validity.valid) {
+            setEmailValid((false));
+        } else {
+            setEmailValid(true);
+        }
+    }
+
+
+    let emailClass = "form-control"
+    if(!emailValid && email !== "") {
+        emailClass = "form-control is-invalid"
+    } else if(emailValid && email !== "") {
+        emailClass = "form-control is-valid"
+    }
 
     return (
         <>
@@ -57,7 +73,7 @@ const Login = () => {
                     <h1>Login</h1>
                     <form onSubmit={loginUser}>
                         <div className="form-floating mb-3">
-                            <input type="email" className="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="name@example.com" onChange={emailChangeHandler}/>
+                            <input type="email" className={emailClass} id="inputEmail" aria-describedby="emailHelp" placeholder="name@example.com" onChange={emailChangeHandler} onBlur={checkValidity}/>
                             <label htmlFor="inputEmail" className="form-label">Email address</label>
                         </div>
                         <div className="form-floating mb-3">
