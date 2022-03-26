@@ -8,7 +8,6 @@ import RegistrationForm from "./components/Registration/registrationForm";
 function App() {
     return (
         <>
-        	<Header />
             <Route path="/" exact>
                 <Redirect to='/login'/>
             </Route>
