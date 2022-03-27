@@ -42,7 +42,7 @@ function RegistrationForm() {
     }
 
     const handleSubmit  = () => {
-        console.log(firstName,lastName,email,password,confirmPassword);
+        
 		let obj = {
             firstName : firstName,
             lastName:lastName,
@@ -56,9 +56,9 @@ function RegistrationForm() {
       axios
         .post(
           endpoint + "/api/task",
-          {
+          
             obj,
-          },
+         
           {
             headers: {
               "Content-Type": "application/x-www-form-urlencoded",
