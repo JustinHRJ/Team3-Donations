@@ -1,7 +1,8 @@
-import {useState} from 'react';
+import { React, useState, useContext } from 'react';
 import './Login.css';
 import { Link, useHistory } from "react-router-dom";
 import { Toast, ToastContainer } from "react-bootstrap";
+import AuthContext from "../util/auth-context";
 
 const Login = () => {
 
@@ -9,14 +10,22 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [errorOccurred, setErrorOccurred] = useState(false);
     const history = useHistory();
+    const [emailValid, setEmailValid] = useState(true);
 
+    const authCtx = useContext(AuthContext);
 
     const loginUser = (event) => {
         event.preventDefault();
-        if(true) {
-            setErrorOccurred(true);
-            // history.replace('/registration');
+        let hasError = false;
+        if(email === "" || password === "") {
+            hasError = true;
         }
+        if(hasError) {
+            setErrorOccurred(true);
+            return;
+        }
+        authCtx.login('faketoken');
+        history.replace('/registration');
     }
 
     const emailChangeHandler = (event) => {
@@ -31,6 +40,21 @@ const Login = () => {
         setErrorOccurred(false);
     }
 
+    const checkValidity = (event) => {
+        if(!event.target.validity.valid) {
+            setEmailValid((false));
+        } else {
+            setEmailValid(true);
+        }
+    }
+
+
+    let emailClass = "form-control"
+    if(!emailValid && email !== "") {
+        emailClass = "form-control is-invalid"
+    } else if(emailValid && email !== "") {
+        emailClass = "form-control is-valid"
+    }
 
     return (
         <>
@@ -38,7 +62,7 @@ const Login = () => {
                 <ToastContainer className="p-3" position='top-center'>
                     <Toast show={errorOccurred} onClose={removeErrorToastr} bg='danger' delay={5000} autohide>
                         <Toast.Header closeButton={true}>
-                            <strong className="me-auto">Error</strong>
+                            <strong className="me-auto">Authentication Failed</strong>
                         </Toast.Header>
                         <Toast.Body className='text-white'>Email may not be registered or Password is incorrect.</Toast.Body>
                     </Toast>
@@ -49,7 +73,7 @@ const Login = () => {
                     <h1>Login</h1>
                     <form onSubmit={loginUser}>
                         <div className="form-floating mb-3">
-                            <input type="email" className="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="name@example.com" onChange={emailChangeHandler}/>
+                            <input type="email" className={emailClass} id="inputEmail" aria-describedby="emailHelp" placeholder="name@example.com" onChange={emailChangeHandler} onBlur={checkValidity}/>
                             <label htmlFor="inputEmail" className="form-label">Email address</label>
                         </div>
                         <div className="form-floating mb-3">

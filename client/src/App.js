@@ -1,8 +1,9 @@
-import Login from './components/Login/Login';
-import Registration from './components/Registration/Registration';
-import './App.css';
 import {Route, Redirect} from 'react-router-dom';
-
+import Login from './components/Login/Login';
+import React from 'react';
+import { Container } from "semantic-ui-react";
+import Header from "./components/Registration/header";
+import RegistrationForm from "./components/Registration/registrationForm";
 
 function App() {
     return (
@@ -14,7 +15,7 @@ function App() {
                 <Login/>
             </Route>
             <Route path='/registration'>
-                <Registration />
+                <RegistrationForm/>
             </Route>
         </>
     );
