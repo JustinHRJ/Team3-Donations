@@ -11,6 +11,7 @@ const Login = () => {
     const [errorOccurred, setErrorOccurred] = useState(false);
     const history = useHistory();
     const [emailValid, setEmailValid] = useState(true);
+    const [errorMsg, setErrorMsg] = useState("");
 
     const authCtx = useContext(AuthContext);
 
@@ -19,7 +20,11 @@ const Login = () => {
         let hasError = false;
         if(email === "" || password === "") {
             hasError = true;
+            setErrorMsg("Email and Password cannot be left blank. Please try again");
         }
+
+        //TODO: backend validation error message
+        //"Email may not be registered or Password is incorrect."
         if(hasError) {
             setErrorOccurred(true);
             return;
@@ -64,7 +69,7 @@ const Login = () => {
                         <Toast.Header closeButton={true}>
                             <strong className="me-auto">Authentication Failed</strong>
                         </Toast.Header>
-                        <Toast.Body className='text-white'>Email may not be registered or Password is incorrect.</Toast.Body>
+                        <Toast.Body className='text-white'>{errorMsg}</Toast.Body>
                     </Toast>
                 </ToastContainer>
             </div>
