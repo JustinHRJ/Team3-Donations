@@ -1,7 +1,7 @@
-import { React, useState, useContext } from 'react';
+import {React, useState, useContext} from 'react';
 import './Login.css';
-import { Link, useHistory } from "react-router-dom";
-import { Toast, ToastContainer } from "react-bootstrap";
+import {Link, useHistory} from "react-router-dom";
+import {Toast, ToastContainer} from "react-bootstrap";
 import AuthContext from "../util/auth-context";
 
 const Login = () => {
@@ -15,22 +15,40 @@ const Login = () => {
 
     const authCtx = useContext(AuthContext);
 
-    const loginUser = (event) => {
+    async function loginUser(event) {
         event.preventDefault();
-        let hasError = false;
-        if(email === "" || password === "") {
-            hasError = true;
+        if (email === "" || password === "") {
+            setErrorOccurred(true);
             setErrorMsg("Email and Password cannot be left blank. Please try again");
+            return;
         }
 
-        //TODO: backend validation error message
-        //"Email may not be registered or Password is incorrect."
-        if(hasError) {
+        const record = {
+            "Email": email,
+            "Password": password
+        };
+
+        let hasError;
+
+
+        const response = await fetch("http://localhost:8888/api/login", {
+            method: "POST",
+            body: JSON.stringify(record),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        hasError = data.Success != 1;
+        if (hasError) {
+            setErrorMsg(data.ErrorMsg);
             setErrorOccurred(true);
             return;
         }
-        authCtx.login('faketoken');
+
+        authCtx.login(data.LoginKey);
         history.replace('/registration');
+
     }
 
     const emailChangeHandler = (event) => {
@@ -46,7 +64,7 @@ const Login = () => {
     }
 
     const checkValidity = (event) => {
-        if(!event.target.validity.valid) {
+        if (!event.target.validity.valid) {
             setEmailValid((false));
         } else {
             setEmailValid(true);
@@ -55,9 +73,9 @@ const Login = () => {
 
 
     let emailClass = "form-control"
-    if(!emailValid && email !== "") {
+    if (!emailValid && email !== "") {
         emailClass = "form-control is-invalid"
-    } else if(emailValid && email !== "") {
+    } else if (emailValid && email !== "") {
         emailClass = "form-control is-valid"
     }
 
@@ -78,11 +96,13 @@ const Login = () => {
                     <h1>Login</h1>
                     <form onSubmit={loginUser}>
                         <div className="form-floating mb-3">
-                            <input type="email" className={emailClass} id="inputEmail" aria-describedby="emailHelp" placeholder="name@example.com" onChange={emailChangeHandler} onBlur={checkValidity}/>
+                            <input type="email" className={emailClass} id="inputEmail" aria-describedby="emailHelp"
+                                   placeholder="name@example.com" onChange={emailChangeHandler} onBlur={checkValidity}/>
                             <label htmlFor="inputEmail" className="form-label">Email address</label>
                         </div>
                         <div className="form-floating mb-3">
-                            <input type="password" className="form-control" id="inputPassword" onChange={passwordChangeHandler} placeholder='Password'/>
+                            <input type="password" className="form-control" id="inputPassword"
+                                   onChange={passwordChangeHandler} placeholder='Password'/>
                             <label htmlFor="inputPassword" className="form-label">Password</label>
                         </div>
                         <button type="submit" className="btn btn-primary">Submit</button>

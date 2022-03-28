@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson"
 	"log"
 	"net/http"
 	"os"
@@ -91,4 +92,12 @@ func insertOneTask(task models.HomeOwner) {
 	}
 
 	fmt.Println("Inserted a Single Record ", insertResult.InsertedID)
+}
+
+func RetrieveHomeOwner(email string) (*models.HomeOwner, error) {
+	var result models.HomeOwner
+	if err := collection.FindOne(context.Background(), bson.M{"email": email}).Decode(&result); err != nil {
+		return nil, err
+	}
+	return &result, nil
 }
