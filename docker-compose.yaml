@@ -7,7 +7,7 @@ services:
     env_file: 
       - ./env/mongo.env
   backend:
-    build: ./server
+    image: 'justinhrj/e-donation-server'
     ports:
       - '8888:8888'
     env_file: 
@@ -17,7 +17,7 @@ services:
     stdin_open: true
     tty: true
   frontend:
-    build: ./client
+    image: 'justinhrj/e-donation-client'
     ports: 
       - '3000:3000'
     stdin_open: true
