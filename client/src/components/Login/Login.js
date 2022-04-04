@@ -31,7 +31,7 @@ const Login = () => {
         let hasError;
 
 
-        const response = await fetch("http://localhost:8888/api/login", {
+        const response = await fetch("http://backend:8888/api/login", {
             method: "POST",
             body: JSON.stringify(record),
             headers: {

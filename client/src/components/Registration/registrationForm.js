@@ -3,7 +3,7 @@ import './style.css';
 import axios from "axios";
 import Header from "./header";
 
-let endpoint = "http://localhost:8888";
+let endpoint = "http://backend:8888";
 
 function RegistrationForm() {
 	
