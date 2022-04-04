@@ -1,6 +1,4 @@
-import {getCLS} from "web-vitals";
-
-getCLSimport React from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from "react-router-dom";
 import './index.css';
