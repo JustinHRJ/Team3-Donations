@@ -2,13 +2,12 @@ package dbconnection
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"go.mongodb.org/mongo-driver/bson"
 	"log"
-	"net/http"
 	"os"
 	"server/models"
+
+	"go.mongodb.org/mongo-driver/bson"
 
 	"github.com/joho/godotenv"
 
@@ -17,7 +16,7 @@ import (
 )
 
 // collection object/instance
-var collection *mongo.Collection
+var homeOwnerCollection, CharityOrganizationCollection *mongo.Collection
 
 // create connection with mongo db
 func init() {
@@ -42,7 +41,7 @@ func createDBInstance() {
 	dbName := os.Getenv("DB_NAME")
 
 	// Collection name
-	collName := os.Getenv("DB_COLLECTION_NAME")
+	// collName := os.Getenv("DB_COLLECTION_NAME")
 
 	// Set client options
 	clientOptions := options.Client().ApplyURI(connectionString)
@@ -65,38 +64,36 @@ func createDBInstance() {
 
 	fmt.Println("Connected to MongoDB!")
 
-	collection = client.Database(dbName).Collection(collName)
+	homeOwnerCollection = client.Database(dbName).Collection("homeOwner")
+	CharityOrganizationCollection = client.Database(dbName).Collection("charityOrganization")
 
 	fmt.Println("Collection instance created!")
 
 }
 
-// CreateTask create task route
-func CreateTask(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Context-Type", "application/x-www-form-urlencoded")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	var obj models.HomeOwner
-	_ = json.NewDecoder(r.Body).Decode(&obj)
-	insertOneTask(obj)
-	json.NewEncoder(w).Encode(obj)
-}
-
-// Insert one task in the DB
-func insertOneTask(task models.HomeOwner) {
-	insertResult, err := collection.InsertOne(context.Background(), task)
+func InsertOneHomeOwner(task models.HomeOwner) {
+	insertResult, err := homeOwnerCollection.InsertOne(context.Background(), task)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Inserted a Single Record ", insertResult.InsertedID)
+	fmt.Println("Inserted a Single Homeowner Record ", insertResult.InsertedID)
+}
+
+func InsertOneCharityOrganization(task models.CharityOrganization) {
+	insertResult, err := CharityOrganizationCollection.InsertOne(context.Background(), task)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Inserted a Single Charity Organization Record ", insertResult.InsertedID)
 }
 
 func RetrieveHomeOwner(email string) (*models.HomeOwner, error) {
 	var result models.HomeOwner
-	if err := collection.FindOne(context.Background(), bson.M{"email": email}).Decode(&result); err != nil {
+	if err := homeOwnerCollection.FindOne(context.Background(), bson.M{"email": email}).Decode(&result); err != nil {
 		return nil, err
 	}
 	return &result, nil

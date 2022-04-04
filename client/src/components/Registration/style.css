@@ -3,9 +3,9 @@ body{
     background: -webkit-linear-gradient(to right, #2c3e50, #bdc3c7);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to right, #2c3e50, #bdc3c7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
-
+#form,
 .form{
-    background-color: white;
+    background-color: rgb(228, 129, 129);
     border-radius: 5px;
     width: 550px;
     margin: 20px auto;
@@ -33,3 +33,15 @@ body{
 .footer{
     text-align: center;
 }
+
+/**Custom CSS for registration**/
+#regForm{
+    background: hsla(0, 0%, 100%, 0.55);
+    backdrop-filter: blur(30px);
+}
+
+#box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
