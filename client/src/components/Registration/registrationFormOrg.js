@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './style.css';
 import axios from "axios";
+import Swal from 'sweetalert2/dist/sweetalert2.js'
 
 let endpoint = "http://localhost:8888";
 
@@ -116,9 +117,7 @@ function RegistrationFormOrg() {
                 axios
                     .post(
                         endpoint + "/api/registerCharityOrganization",
-
                         obj,
-
                         {
                             headers: {
                                 "Content-Type": "application/x-www-form-urlencoded",
@@ -127,6 +126,9 @@ function RegistrationFormOrg() {
                     )
                     .then((res) => {
                         console.log(res);
+                        Swal.fire({ title: 'Register Successfully!', text: 'Click OK to redirect to login page', type: 'success', confirmButtonText: 'OK' }).then(function() {
+                            window.location = "/login";
+                        });
                     });
 
             } else {
