@@ -1,8 +1,8 @@
 package router
 
 import (
-	"server/dbconnection"
 	"server/login"
+	"server/registeration"
 
 	"github.com/gorilla/mux"
 )
@@ -12,7 +12,8 @@ func Router() *mux.Router {
 
 	router := mux.NewRouter()
 
-	router.HandleFunc("/api/task", dbconnection.CreateTask).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/registerHomeOwner", registeration.CreateHomeOwner).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/registerCharityOrganization", registeration.CreateCharityOrganization).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/login", login.User).Methods("POST", "OPTIONS")
 
 	return router

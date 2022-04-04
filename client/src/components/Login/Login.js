@@ -39,7 +39,7 @@ const Login = () => {
             }
         });
         const data = await response.json();
-        hasError = data.Success != 1;
+        hasError = data.Success !== 1;
         if (hasError) {
             setErrorMsg(data.ErrorMsg);
             setErrorOccurred(true);
