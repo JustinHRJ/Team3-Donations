@@ -22,6 +22,7 @@ type userResult struct {
 	LoginKey  string
 	FirstName string
 	LastName  string
+	UserType  string
 }
 
 type userCredential struct {
@@ -51,6 +52,7 @@ func User(w http.ResponseWriter, r *http.Request) {
 				result.Success = 1
 				result.FirstName = record.FirstName
 				result.LastName = record.LastName
+				result.UserType = "homeOwner"
 				expirationTime := time.Now().Add(time.Minute * 20)
 				claims := &Claims{
 					Username: t.Email,

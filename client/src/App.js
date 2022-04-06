@@ -1,6 +1,8 @@
 import {Route, Redirect} from 'react-router-dom';
 import Login from './components/Login/Login';
 import RegistrationForm from "./components/Registration/registrationForm";
+import Homeowner from "./components/Homeowner/Homeowner";
+import Organization from "./components/Organization/Organization";
 
 function App() {
     return (
@@ -13,6 +15,12 @@ function App() {
             </Route>
             <Route path='/registration'>
                 <RegistrationForm/>
+            </Route>
+            <Route path='/home'>
+                <Homeowner />
+            </Route>
+            <Route path='/org'>
+                <Organization />
             </Route>
         </>
     );

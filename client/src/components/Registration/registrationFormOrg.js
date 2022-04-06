@@ -3,7 +3,7 @@ import './style.css';
 import axios from "axios";
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 
-let endpoint = "http://backend:8888";
+let endpoint = "http://localhost:8888";
 
 function RegistrationFormOrg() {
 
@@ -172,10 +172,10 @@ function RegistrationFormOrg() {
                         <label className="form__label" htmlFor="regionOfInterest">Region </label>
                         <input type="text" name="" id="regionOfInterest" value={regionOfInterest} className="form__input" onChange={(e) => handleInputChange(e)} placeholder="Interest Region" />
                     </div>
-                    <div class="col-12">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value={invalidCheck} id="invalidCheck" required onChange={(e) => handleInputChange(e)} />
-                            <label class="form-check-label" for="invalidCheck" htmlFor="checkbox">
+                    <div className="col-12">
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" value={invalidCheck} id="invalidCheck" required onChange={(e) => handleInputChange(e)} />
+                            <label className="form-check-label" htmlFor="invalidCheck" htmlFor="checkbox">
                                 Agree to terms and conditions
                             </label>
                             <p className="text-danger">{checkboxError}</p>

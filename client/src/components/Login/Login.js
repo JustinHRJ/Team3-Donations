@@ -3,6 +3,7 @@ import './Login.css';
 import {Link, useHistory} from "react-router-dom";
 import {Toast, ToastContainer} from "react-bootstrap";
 import AuthContext from "../util/auth-context";
+import authContext from "../util/auth-context";
 
 const Login = () => {
 
@@ -15,6 +16,12 @@ const Login = () => {
 
     const authCtx = useContext(AuthContext);
 
+    if(authCtx.isLoggedIn && authCtx.isHomeOwner) {
+        history.replace('/home');
+    } else if (authCtx.isLoggedIn && authCtx.isOrg) {
+        history.replace('/org')
+    }
+
     async function loginUser(event) {
         event.preventDefault();
         if (email === "" || password === "") {
@@ -22,22 +29,19 @@ const Login = () => {
             setErrorMsg("Email and Password cannot be left blank. Please try again");
             return;
         }
-
         const record = {
             "Email": email,
             "Password": password
         };
-
         let hasError;
-
-
-        const response = await fetch("http://backend:8888/api/login", {
+        const response = await fetch("http://localhost:8888/api/login", {
             method: "POST",
             body: JSON.stringify(record),
             headers: {
                 'Content-Type': 'application/json'
             }
         });
+
         const data = await response.json();
         hasError = data.Success !== 1;
         if (hasError) {
@@ -46,9 +50,7 @@ const Login = () => {
             return;
         }
 
-        authCtx.login(data.LoginKey);
-        history.replace('/registration');
-
+        authCtx.login(data.LoginKey, data.UserType);
     }
 
     const emailChangeHandler = (event) => {
