@@ -136,3 +136,19 @@ func RetrieveAllItemListingsByHomeOwnerID(homeOwnerID primitive.ObjectID) (*[]mo
 
 	return &itemListings, nil
 }
+
+func UpdateOneItemListing(itemListing models.ItemListing) bool {
+	filter := bson.M{"$and": []interface{}{bson.M{"_id": itemListing.ID}}}
+	update := bson.M{"$set": bson.M{"itemname": itemListing.ItemName, "itemdescription": itemListing.ItemDescription,
+		"homeownerid": itemListing.HomeOwnerID, "homeowner": itemListing.HomeOwner, "listingdatetime": itemListing.ListingDateTime}}
+
+	_, err := itemListingCollection.UpdateOne(context.TODO(), filter, update)
+
+	if err != nil {
+		fmt.Println("Error updating Item Listing", err)
+		return false
+	}
+
+	fmt.Println("Update Item Listing successful")
+	return true
+}

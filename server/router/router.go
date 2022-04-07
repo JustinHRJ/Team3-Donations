@@ -1,6 +1,7 @@
 package router
 
 import (
+	"server/listing"
 	"server/login"
 	"server/registeration"
 
@@ -14,6 +15,8 @@ func Router() *mux.Router {
 
 	router.HandleFunc("/api/registerHomeOwner", registeration.CreateHomeOwner).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/registerCharityOrganization", registeration.CreateCharityOrganization).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/listItem", listing.ListItem).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/updateItem", listing.UpdateItem).Methods("POST", "OPTIONS")
 	router.HandleFunc("/api/login", login.User).Methods("POST", "OPTIONS")
 
 	return router

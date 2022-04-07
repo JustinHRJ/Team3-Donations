@@ -30,7 +30,16 @@ type ItemListing struct {
 	ID              primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
 	ItemName        string             `json:"itemName,omitempty"`
 	ItemDescription string             `json:"itemDescription,omitempty"`
-	HomeOwnerID     primitive.ObjectID
-	HomeOwner       HomeOwner
-	ListingDateTime time.Time
+	HomeOwnerID     primitive.ObjectID `json:"homeOwnerID,omitempty"`
+	HomeOwner       HomeOwner          `json:"homeOwner,omitempty"`
+	ListingDateTime time.Time          `json:"listingDateTime,omitempty"`
+}
+
+type Event struct {
+	ID              primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	DateTime        time.Time          `json:"dateTime,omitempty"`
+	Region          string             `json:"region,omitempty"`
+	Detail          string             `json:"detail,omitempty"`
+	Status          string             `json:"status,omitempty"`
+	CreatedDateTime time.Time          `json:"createdDateTime,omitempty"`
 }
