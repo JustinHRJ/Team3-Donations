@@ -16,7 +16,7 @@ import (
 )
 
 // collection object/instance
-var homeOwnerCollection, CharityOrganizationCollection *mongo.Collection
+var homeOwnerCollection, CharityOrganizationCollection, ItemListingCollection *mongo.Collection
 
 // create connection with mongo db
 func init() {
@@ -66,6 +66,7 @@ func createDBInstance() {
 
 	homeOwnerCollection = client.Database(dbName).Collection("homeOwner")
 	CharityOrganizationCollection = client.Database(dbName).Collection("charityOrganization")
+	ItemListingCollection = client.Database(dbName).Collection("itemListing")
 
 	fmt.Println("Collection instance created!")
 
@@ -89,6 +90,16 @@ func InsertOneCharityOrganization(task models.CharityOrganization) {
 	}
 
 	fmt.Println("Inserted a Single Charity Organization Record ", insertResult.InsertedID)
+}
+
+func InsertOneItemListing(task models.ItemListing) {
+	insertResult, err := ItemListingCollection.InsertOne(context.Background(), task)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Inserted a Single Item Listing Record ", insertResult.InsertedID)
 }
 
 func RetrieveHomeOwner(email string) (*models.HomeOwner, error) {
