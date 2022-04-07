@@ -8,6 +8,7 @@ import (
 	"server/models"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/joho/godotenv"
 
@@ -16,7 +17,7 @@ import (
 )
 
 // collection object/instance
-var homeOwnerCollection, CharityOrganizationCollection, ItemListingCollection *mongo.Collection
+var homeOwnerCollection, CharityOrganizationCollection, itemListingCollection *mongo.Collection
 
 // create connection with mongo db
 func init() {
@@ -66,22 +67,13 @@ func createDBInstance() {
 
 	homeOwnerCollection = client.Database(dbName).Collection("homeOwner")
 	CharityOrganizationCollection = client.Database(dbName).Collection("charityOrganization")
-	ItemListingCollection = client.Database(dbName).Collection("itemListing")
+	itemListingCollection = client.Database(dbName).Collection("itemListing")
 
 	fmt.Println("Collection instance created!")
 
 }
 
-func InsertOneHomeOwner(task models.HomeOwner) {
-	insertResult, err := homeOwnerCollection.InsertOne(context.Background(), task)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("Inserted a Single Homeowner Record ", insertResult.InsertedID)
-}
-
+//CHARITY ORGANIZATION
 func InsertOneCharityOrganization(task models.CharityOrganization) {
 	insertResult, err := CharityOrganizationCollection.InsertOne(context.Background(), task)
 
@@ -92,14 +84,15 @@ func InsertOneCharityOrganization(task models.CharityOrganization) {
 	fmt.Println("Inserted a Single Charity Organization Record ", insertResult.InsertedID)
 }
 
-func InsertOneItemListing(task models.ItemListing) {
-	insertResult, err := ItemListingCollection.InsertOne(context.Background(), task)
+//HOME OWNER
+func InsertOneHomeOwner(task models.HomeOwner) {
+	insertResult, err := homeOwnerCollection.InsertOne(context.Background(), task)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Inserted a Single Item Listing Record ", insertResult.InsertedID)
+	fmt.Println("Inserted a Single Homeowner Record ", insertResult.InsertedID)
 }
 
 func RetrieveHomeOwner(email string) (*models.HomeOwner, error) {
@@ -108,4 +101,38 @@ func RetrieveHomeOwner(email string) (*models.HomeOwner, error) {
 		return nil, err
 	}
 	return &result, nil
+}
+
+//ITEM LISTING
+func InsertOneItemListing(task models.ItemListing) {
+	insertResult, err := itemListingCollection.InsertOne(context.Background(), task)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Inserted a Single Item Listing Record ", insertResult.InsertedID)
+}
+
+func RetrieveOneItemListingByItemListingID(itemListingID primitive.ObjectID) (*models.ItemListing, error) {
+	var result models.ItemListing
+	if err := itemListingCollection.FindOne(context.Background(), bson.M{"_id": itemListingID}).Decode(&result); err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+func RetrieveAllItemListingsByHomeOwnerID(homeOwnerID primitive.ObjectID) (*[]models.ItemListing, error) {
+	cursor, err := itemListingCollection.Find(context.TODO(), bson.M{"homeownerid": homeOwnerID})
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var itemListings []models.ItemListing
+	if err = cursor.All(context.TODO(), &itemListings); err != nil {
+		log.Fatal(err)
+	}
+
+	return &itemListings, nil
 }
