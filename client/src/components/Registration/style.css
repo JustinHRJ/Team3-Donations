@@ -1,33 +1,96 @@
-body{
-    background: #bdc3c7;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #2c3e50, #bdc3c7);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #2c3e50, #bdc3c7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+body {
+    background-color: #1c28b1;
+    font-family: "Poppins", sans-serif;
+    font-weight: 300
 }
-#form,
+
+/*#form,
 .form{
     background-color: rgb(228, 129, 129);
     border-radius: 5px;
     width: 550px;
     margin: 20px auto;
     padding: 20px;
-    /* height: 600px; */
+    /* height: 600px; 
+}*/
+
+.height {
+    height: 100vh
 }
 
-.form-body{
-    text-align: left;
-    padding: 20px 10px;
+
+
+.card {
+    border: none;
+    padding: 20px;
+    background-color: #1c1e21;
+    color: rgb(28, 26, 182)
 }
 
-.form-body > *{
-    padding: 5px;
+.circle {
+    height: 20px;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #5855e7;
+    color: #fff;
+    font-size: 10px;
+    border-radius: 50%
 }
 
-.form__label{
-    width: 40%;
+.form-input {
+    position: relative;
+    margin-bottom: 10px;
+    margin-top: 10px
 }
 
-.form_input{
-    width: 60%;
+.form-input i {
+    position: absolute;
+    font-size: 18px;
+    top: 15px;
+    left: 10px
+}
+
+.form-control {
+    height: 50px;
+    background-color: #1c1e21;
+    text-indent: 24px;
+    font-size: 15px
+}
+
+.form-control:focus {
+    background-color: #25272a;
+    box-shadow: none;
+    color: #fff;
+    border-color: #4f63e7
+}
+
+.form-check-label {
+    margin-top: 2px;
+    font-size: 14px
+}
+
+.signup {
+    height: 50px;
+    font-size: 14px
+}
+
+.social {
+    height: 50px;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #eee;
+    border-radius: 50%;
+    margin-right: 10px;
+    cursor: pointer
+}
+
+.social:hover {
+    background-color: #0d6efd;
+    border-color: #0d6efd
 }
 
 .footer{

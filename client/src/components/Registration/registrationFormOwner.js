@@ -123,7 +123,7 @@ function RegistrationFormOwner() {
                     )
                     .then((res) => {
                         console.log(res);
-                        Swal.fire({ title: 'Register Successfully!', text: 'Click OK to redirect to login page', type: 'success', confirmButtonText: 'OK' }).then(function() {
+                        Swal.fire({ title: 'Register Successfully!', text: 'Click OK to redirect to login page', type: 'success', confirmButtonText: 'OK' }).then(function () {
                             window.location = "/login";
                         });
                     });
@@ -135,50 +135,48 @@ function RegistrationFormOwner() {
 
     return (
         <>
-            <div className="form">
-                <div className="form-body">
-                    <div className="username">
-                        <label className="form__label" htmlFor="firstName">First Name </label>
-                        <input className="form__input" type="text" value={firstName} onChange={(e) => handleInputChange(e)} id="firstName" placeholder="First Name" />
-                    </div>
-                    <div className="lastname">
-                        <label className="form__label" htmlFor="lastName">Last Name </label>
-                        <input type="text" name="" id="lastName" value={lastName} className="form__input" onChange={(e) => handleInputChange(e)} placeholder="LastName" />
-                    </div>
-                    <div className="email">
-                        <label className="form__label" htmlFor="email">Email </label>
-                        <input type="email" id="email" className="form__input" value={email} onChange={(e) => handleInputChange(e)} placeholder="Email" />
-                    </div>
-                    <div className="password">
-                        <label className="form__label" htmlFor="password">Password </label>
-                        <input className="form__input" type="password" id="password" value={password} onChange={(e) => handleInputChange(e)} onKeyUp={handlePasswordValidation} placeholder="Password" />
-                        <p className="text-danger">{passwordError}</p>
-                    </div>
-                    <div className="confirm-password">
-                        <label className="form__label" htmlFor="confirmPassword">Confirm Password </label>
-                        <input className="form__input" type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => handleInputChange(e)} onKeyUp={handlePasswordValidation} placeholder="Confirm Password" />
-                        <p className="text-danger">{confirmPasswordError}</p>
-                    </div>
-                    <div className="address">
-                        <label className="form__label" htmlFor="address">Address </label>
-                        <input className="form__input" type="text" value={address} onChange={(e) => handleInputChange(e)} id="address" placeholder="Address" />
-                    </div>
-                    <div className="region">
-                        <label className="form__label" htmlFor="region">Region </label>
-                        <input type="text" name="" id="region" value={region} className="form__input" onChange={(e) => handleInputChange(e)} placeholder="region" />
-                    </div>
-                    <div className="col-12">
-                        <div className="form-check">
-                            <input className="form-check-input" type="checkbox" value={invalidCheck} id="invalidCheck" required onChange={(e) => handleInputChange(e)} />
-                            <label className="form-check-label" htmlFor="invalidCheck" htmlFor="checkbox">
-                                Agree to terms and conditions
-                            </label>
-                            <p className="text-danger">{checkboxError}</p>
+            <div class="form">
+                <div class="form-body row d-flex align-items-center justify-content-center">
+                    {/*<div class="form-body">*/}
+                    <div class="col-md-6">
+                        <div class="card px-5 py-5">
+                            <div class="form-input"> <i class="fa fa-user"></i>
+                                <input class="form-control" type="text" id="firstName" value={firstName} onChange={(e) => handleInputChange(e)} placeholder="First Name" />
+                            </div>
+                            <div class="form-input"> <i class="fa fa-user-circle-o"></i>
+                                <input class="form-control" type="text" id="lastName" value={lastName} onChange={(e) => handleInputChange(e)} placeholder="LastName" />
+                            </div>
+                            <div class="form-input"> <i class="fa fa-envelope"></i>
+                                <input type="email" id="email" class="form-control" value={email} onChange={(e) => handleInputChange(e)} placeholder="Email" />
+                            </div>
+                            <div class="form-input"> <i class="fa fa-lock"></i>
+                                <input class="form-control" type="password" id="password" value={password} onChange={(e) => handleInputChange(e)} onKeyUp={handlePasswordValidation} placeholder="Password" />
+                                <p class="text-danger">{passwordError}</p>
+                            </div>
+                            <div class="form-input"> <i class="fa fa-unlock-alt"></i>
+                                <input class="form-control" type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => handleInputChange(e)} onKeyUp={handlePasswordValidation} placeholder="Confirm Password" />
+                                <p class="text-danger">{confirmPasswordError}</p>
+                            </div>
+                            <div class="form-input"> <i class="fa fa-map-marker"></i>
+                                <input class="form-control" type="text" value={address} onChange={(e) => handleInputChange(e)} id="address" placeholder="Address" />
+                            </div>
+                            <div class="form-input"> <i class="fa fa-globe"></i>
+                                <input class="form-control" type="text" name="" id="region" value={region} onChange={(e) => handleInputChange(e)} placeholder="Region" />
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value={invalidCheck} id="invalidCheck" required onChange={(e) => handleInputChange(e)} />
+                                    <label class="form-check-label" for="invalidCheck" htmlFor="checkbox">
+                                        Agree to terms and conditions
+                                    </label>
+                                    <p class="text-danger">{checkboxError}</p>
+                                </div>
+                            </div>
+                            <div class="footer">
+                                <button onClick={() => handleSubmit()} type="submit" class="btn btn-primary">Register</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className="footer">
-                    <button onClick={() => handleSubmit()} type="submit" className="btn btn-primary">Register</button>
                 </div>
             </div>
         </>
