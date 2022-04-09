@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import './style.css';
+
 import axios from "axios";
-import Swal from 'sweetalert2/dist/sweetalert2.js'
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+
+
 
 let endpoint = "http://localhost:8888";
 
@@ -14,9 +16,14 @@ function RegistrationFormOwner() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [address, setAddress] = useState("");
     const [region, setRegion] = useState("");
-    const [passwordError, setPasswordErr] = useState("");
+    const [passwordError, setPasswordError] = useState("");
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
     const [invalidCheck, setInvalidCheck] = useState("");
+    const [firstNameError, setFirstNameError] = useState("");
+    const [lastNameError, setLastNameError] = useState("");
+    const [emailError, setEmailError] = useState("");
+    const [addressError, setAddressError] = useState("");
+    const [regionError, setRegionError] = useState("");
     const [checkboxError, setCheckboxError] = useState("");
 
     const handleInputChange = (e) => {
@@ -46,26 +53,60 @@ function RegistrationFormOwner() {
         if (id === "invalidCheck") {
             let isChecked = e.target.checked;
             setInvalidCheck(isChecked);
+            if (isChecked) {
+                setCheckboxError("");
+            } else {
+                setCheckboxError("You must agree before submitting.");
+            }
         }
+
+        handleValidation(e);
 
     }
 
-    const handlePasswordValidation = (evnt) => {
-        const passwordInputValue = evnt.target.value.trim();
-        const passwordInputFieldName = evnt.target.id;
+    const handleValidation = (evnt) => {
+        const inputValue = evnt.target.value.trim();
+        const inputFieldName = evnt.target.id;
+
+        // for first name
+        if (inputFieldName === "firstName") {
+            if (inputValue.length === 0) {
+                setFirstNameError("First Name is empty");
+            } else {
+                setFirstNameError("");
+            }
+        }
+
+        // for last name
+        if (inputFieldName === "lastName") {
+            if (inputValue.length === 0) {
+                setLastNameError("Last Name is empty");
+            } else {
+                setLastNameError("");
+            }
+        }
+
+        // for email
+        if (inputFieldName === "email") {
+            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(inputValue)) {
+                setEmailError("");
+            } else {
+                setEmailError("Invalid Email");
+            }
+        }
         //for password 
-        if (passwordInputFieldName === 'password') {
+        if (inputFieldName === 'password') {
             const uppercaseRegExp = /(?=.*?[A-Z])/;
             const lowercaseRegExp = /(?=.*?[a-z])/;
             const digitsRegExp = /(?=.*?[0-9])/;
             const specialCharRegExp = /(?=.*?[#?!@$%^&*-])/;
             const minLengthRegExp = /.{8,}/;
-            const passwordLength = passwordInputValue.length;
-            const uppercasePassword = uppercaseRegExp.test(passwordInputValue);
-            const lowercasePassword = lowercaseRegExp.test(passwordInputValue);
-            const digitsPassword = digitsRegExp.test(passwordInputValue);
-            const specialCharPassword = specialCharRegExp.test(passwordInputValue);
-            const minLengthPassword = minLengthRegExp.test(passwordInputValue);
+            const passwordLength = inputValue.length;
+            const uppercasePassword = uppercaseRegExp.test(inputValue);
+            const lowercasePassword = lowercaseRegExp.test(inputValue);
+            const digitsPassword = digitsRegExp.test(inputValue);
+            const specialCharPassword = specialCharRegExp.test(inputValue);
+            const minLengthPassword = minLengthRegExp.test(inputValue);
             let errMsg = "";
             if (passwordLength === 0) {
                 errMsg = "Password is empty";
@@ -82,11 +123,10 @@ function RegistrationFormOwner() {
             } else {
                 errMsg = "";
             }
-            setPasswordErr(errMsg);
+            setPasswordError(errMsg);
         }
         // for confirm password
-        if (passwordInputFieldName === "confirmPassword" || (passwordInputFieldName === "password" && confirmPassword.length > 0)) {
-
+        if (inputFieldName === "confirmPassword" || (inputFieldName === "password" && confirmPassword.length > 0)) {
             if (confirmPassword !== password) {
                 setConfirmPasswordError("Confirm password is not matched");
             } else {
@@ -94,6 +134,70 @@ function RegistrationFormOwner() {
             }
 
         }
+
+        // for address
+        if (inputFieldName === "address") {
+            if (inputValue.length === 0) {
+                setAddressError("Address is required");
+            } else {
+                setAddressError("");
+            }
+        }
+
+        // for region
+        if (inputFieldName === "region") {
+            if (inputValue.length === 0) {
+                setRegionError("Region field is required");
+            } else {
+                setRegionError("");
+            }
+        }
+    }
+
+    const hasErrorMessage = () => {
+        let hasMsg = false;
+        if (firstNameError || lastNameError || emailError || passwordError || confirmPasswordError || addressError || regionError || checkboxError) {
+            hasMsg = true;
+        }
+        return hasMsg;
+    }
+
+    const validate = () => {
+        let isValidated = true;
+        if (!firstName) {
+            setFirstNameError("First name field is required");
+            isValidated = false;
+        }
+        if (!lastName) {
+            setLastNameError("Last name field is required");
+            isValidated = false;
+        }
+        if (!email) {
+            setEmailError("Email Field is Invalid ");
+            isValidated = false;
+        }
+        if (!password) {
+            setPasswordError("Password is required");
+            isValidated = false;
+        }
+        if (!confirmPassword) {
+            setConfirmPasswordError("This field is required");
+            isValidated = false;
+        }
+        if (!address) {
+            setAddressError("Address is required");
+            isValidated = false;
+        }
+        if (!region) {
+            setRegionError("Region is required");
+            isValidated = false;
+        }
+
+        if(!invalidCheck){
+            setCheckboxError("You must agree before submitting.");
+            isValidated = false;
+        }
+        return isValidated;
     }
 
     const handleSubmit = () => {
@@ -109,8 +213,7 @@ function RegistrationFormOwner() {
             invalidCheck: invalidCheck,
         }
         if (obj) {
-            if (obj.invalidCheck === true) {
-
+            if (validate() && obj.invalidCheck === true && !hasErrorMessage()) {
                 axios
                     .post(
                         endpoint + "/api/registerHomeOwner",
@@ -122,64 +225,78 @@ function RegistrationFormOwner() {
                         }
                     )
                     .then((res) => {
-                        console.log(res);
                         Swal.fire({ title: 'Register Successfully!', text: 'Click OK to redirect to login page', type: 'success', confirmButtonText: 'OK' }).then(function () {
                             window.location = "/login";
                         });
                     });
-            } else {
-                setCheckboxError("You must agree before submitting.");
-            }
+            } 
         }
     }
 
     return (
         <>
-            <div class="form">
-                <div class="form-body row d-flex align-items-center justify-content-center">
-                    {/*<div class="form-body">*/}
-                    <div class="col-md-6">
-                        <div class="card px-5 py-5">
-                            <div class="form-input"> <i class="fa fa-user"></i>
-                                <input class="form-control" type="text" id="firstName" value={firstName} onChange={(e) => handleInputChange(e)} placeholder="First Name" />
+            <div className="form">
+                <div className="form-body row d-flex align-items-center justify-content-center">
+                    <div className="col-md-6">
+                        <div className="card px-5 py-5">
+                            <div className="form-input"> <i className="fa fa-user"></i>
+                                <input className="form-control" type="text" id="firstName" value={firstName} onChange={(e) => handleInputChange(e)} onKeyUp={handleValidation} placeholder="First Name" required />
+                                <p className="text-danger">{firstNameError}</p>
                             </div>
-                            <div class="form-input"> <i class="fa fa-user-circle-o"></i>
-                                <input class="form-control" type="text" id="lastName" value={lastName} onChange={(e) => handleInputChange(e)} placeholder="LastName" />
+                            <div className="form-input"> <i className="fa fa-user-circle-o"></i>
+                                <input className="form-control" type="text" id="lastName" value={lastName} onChange={(e) => handleInputChange(e)} onKeyUp={handleValidation} placeholder="LastName" required={true}/>
+                                <p className="text-danger">{lastNameError}</p>
                             </div>
-                            <div class="form-input"> <i class="fa fa-envelope"></i>
-                                <input type="email" id="email" class="form-control" value={email} onChange={(e) => handleInputChange(e)} placeholder="Email" />
+                            <div className="form-input"> <i className="fa fa-envelope"></i>
+                                <input type="email" id="email" className="form-control" value={email} onChange={(e) => handleInputChange(e)} onKeyUp={handleValidation} placeholder="Email" />
+                                <p className="text-danger">{emailError}</p>
                             </div>
-                            <div class="form-input"> <i class="fa fa-lock"></i>
-                                <input class="form-control" type="password" id="password" value={password} onChange={(e) => handleInputChange(e)} onKeyUp={handlePasswordValidation} placeholder="Password" />
-                                <p class="text-danger">{passwordError}</p>
+                            <div className="form-input"> <i className="fa fa-lock"></i>
+                                <input className="form-control" type="password" id="password" value={password} onChange={(e) => handleInputChange(e)} onKeyUp={handleValidation} placeholder="Password" />
+                                <p className="text-danger">{passwordError}</p>
                             </div>
-                            <div class="form-input"> <i class="fa fa-unlock-alt"></i>
-                                <input class="form-control" type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => handleInputChange(e)} onKeyUp={handlePasswordValidation} placeholder="Confirm Password" />
-                                <p class="text-danger">{confirmPasswordError}</p>
+                            <div className="form-input"> <i className="fa fa-unlock-alt"></i>
+                                <input className="form-control" type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => handleInputChange(e)} onKeyUp={handleValidation} placeholder="Confirm Password" />
+                                <p className="text-danger">{confirmPasswordError}</p>
                             </div>
-                            <div class="form-input"> <i class="fa fa-map-marker"></i>
-                                <input class="form-control" type="text" value={address} onChange={(e) => handleInputChange(e)} id="address" placeholder="Address" />
+                            <div className="form-input"> <i className="fa fa-map-marker"></i>
+                                <input className="form-control" type="text" value={address} onChange={(e) => handleInputChange(e)} id="address" onKeyUp={handleValidation} placeholder="Address" />
+                                <p className="text-danger">{addressError}</p>
                             </div>
-                            <div class="form-input"> <i class="fa fa-globe"></i>
-                                <input class="form-control" type="text" name="" id="region" value={region} onChange={(e) => handleInputChange(e)} placeholder="Region" />
+                            <div className="form-input"> <i className="fa fa-globe"></i>
+                                <select className="form-control" id="region" onChange={(e) => handleInputChange(e)} onKeyUp={handleValidation} >
+                                    <option value="">Please select an option</option>
+                                    <option value="West">West</option>
+                                    <option value="East">East</option>
+                                    <option value="North">North</option>
+                                    <option value="Central">Central</option>
+                                    <option value="South">South</option>
+                                </select>
+                                <p className="text-danger">{regionError}</p>
                             </div>
-                            <div class="col-12">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value={invalidCheck} id="invalidCheck" required onChange={(e) => handleInputChange(e)} />
-                                    <label class="form-check-label" for="invalidCheck" htmlFor="checkbox">
+                            
+                            <div className="col-12">
+                                <div className="form-check">
+                                    <input className="form-check-input" type="checkbox" value={invalidCheck} id="invalidCheck" required onChange={(e) => handleInputChange(e)} />
+                                    <label className="form-check-label" htmlFor="checkbox">
                                         Agree to terms and conditions
                                     </label>
-                                    <p class="text-danger">{checkboxError}</p>
+                                    <p className="text-danger">{checkboxError}</p>
                                 </div>
                             </div>
-                            <div class="footer">
-                                <button onClick={() => handleSubmit()} type="submit" class="btn btn-primary">Register</button>
+                            <div className="footer">
+                                <button onClick={() => handleSubmit()} type="submit" className="btn btn-primary">Register</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </>
     )
+
 }
+
 export default RegistrationFormOwner;
+
+

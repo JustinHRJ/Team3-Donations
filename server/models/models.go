@@ -18,7 +18,7 @@ type HomeOwner struct {
 
 type CharityOrganization struct {
 	ID               primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	OrganizationName string             `json:"firstName,omitempty"`
+	OrganizationName string             `json:"organizationName,omitempty"`
 	Email            string             `json:"email,omitempty"`
 	Password         string             `json:"password,omitempty"`
 	Address          string             `json:"address,omitempty"`
